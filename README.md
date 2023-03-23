@@ -1,6 +1,7 @@
 # Mew Language Specific
 
 Authors: Nguyễn Hoàng Nam
+Inspiration: Elixir
 
 ## Module
 
@@ -32,11 +33,11 @@ Ex:
 
 ```
 // lib/utils/validation.mew
-private fn min(value: int) -> bool:
+fn min(value: int) -> bool:
     value > 18
 end
 
-private fn max(value: int) -> bool:
+fn max(value: int) -> bool:
     value < 100
 end
 
@@ -55,7 +56,7 @@ fn put(conn: HTTP.Connection, _params) -> {:ok | :error, any}:
     conn
     |> Map.get("body", {})
     |> Map.get("age")
-    |> Utils.Validation.Validate()
+    |> Utils.Validation.validate()
     |> case:
         True -> {:ok, {"success": True}}
         _ -> {:ok, {"success": False}}
@@ -72,7 +73,7 @@ Ex:
 ```
 // lib/operator.mew
 fn mult(n: int) -> (m: int) -> int:
-    fn (m: int):
+    fn (m: int) -> int:
         m * n
     end
 end
@@ -149,8 +150,16 @@ assert arr[[2, 4]] == [3, 5] // True
 To assign element to multiple positions:
 
 ```
-arr[1..3] = [20, 30, 40]
+arr = arr[1..3 | [20, 30, 40]] 
 assert arr == [1, 20, 30, 40, 5, 6] // True
+```
+
+Append element:
+
+```
+arr = [arr | 7]
+arr = [0 | arr]
+assert arr == [0, 1, 2, 3, 4, 5, 6, 7] // True
 ```
 
 ## Map
@@ -168,11 +177,33 @@ To get values from multiple keys:
 assert map[["cat", "dog"]] == ["mew", "goog"] // True
 ```
 
+Return default value:
+
+```
+assert map["mouse", "chip"] == "chip" // True
+```
+
+Update map:
+
+```
+map = {map | "mouse": "chip"}
+assert map == {"cat": "meow", "dog": "goog", "mouse": "chip"} // True
+```
+
 ## Pattern matching
+
+```
+map = {"cat": "meow", "dog": "goog"}
+
+{"cat": cat_sound} = map
+assert cat_sound == "meow" // True
+```
+
+## Reference counting
 
 Not defined yet.
 
-## Ownership
+## Generic
 
 Not defined yet.
 
@@ -180,6 +211,14 @@ Not defined yet.
 
 Not defined yet.
 
+## Port
+
+Not defined yet.
+
 ## Config
+
+Not defined yet.
+
+## Actor Model
 
 Not defined yet.
